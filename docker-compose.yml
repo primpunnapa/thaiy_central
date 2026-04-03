@@ -1,0 +1,41 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: bl-postgres
+    environment:
+      POSTGRES_USER: bladmin
+      POSTGRES_PASSWORD: blpass
+      POSTGRES_DB: blcentral
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Backend API
+  backend:
+    build: ./backend
+    container_name: bl-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=postgresql://bladmin:blpass@postgres:5432/blcentral
+    depends_on:
+      - postgres
+
+  # Frontend
+  frontend:
+    build: ./frontend
+    container_name: bl-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
