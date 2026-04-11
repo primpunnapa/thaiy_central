@@ -12,11 +12,13 @@ class SeriesBase(BaseModel):
     status: str = "ongoing"
     air_day: Optional[str] = None
     air_time: Optional[str] = None
+    studio_id: int
+    platforms: List[str] = []
 
 class SeriesCreate(SeriesBase):
-    studio_ids: Optional[List[int]] = []
+    pass
 
-class SeriesUpdate(SeriesBase):
+class SeriesUpdate(BaseModel):
     title_th: Optional[str] = None
     title_en: Optional[str] = None
     description: Optional[str] = None
@@ -25,14 +27,15 @@ class SeriesUpdate(SeriesBase):
     status: Optional[str] = None
     air_day: Optional[str] = None
     air_time: Optional[str] = None
-    studio_ids: Optional[List[int]] = None
+    studio_id: Optional[int] = None
+    platforms: Optional[List[str]] = None
 
 class Series(SeriesBase):
     id: int
     views: int
     created_at: datetime
     updated_at: Optional[datetime]
-    studios: List[Studio] = []
+    studio: Studio
     
     class Config:
         from_attributes = True
@@ -48,3 +51,18 @@ class SeriesList(BaseModel):
     
     class Config:
         from_attributes = True
+
+class SeriesScheduleDay(BaseModel):
+    """Series schedule grouped by day"""
+    day: str
+    series: List[SeriesList]
+
+class SeriesSchedule(BaseModel):
+    """Complete schedule response with series grouped by day"""
+    monday: List[SeriesList] = []
+    tuesday: List[SeriesList] = []
+    wednesday: List[SeriesList] = []
+    thursday: List[SeriesList] = []
+    friday: List[SeriesList] = []
+    saturday: List[SeriesList] = []
+    sunday: List[SeriesList] = []

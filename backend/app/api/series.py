@@ -6,7 +6,7 @@ from app.database.models import User
 from app.persistence.series import SeriesRepository
 from app.persistence.studio import StudioRepository
 from app.business.series import SeriesService
-from app.schemas.series import Series, SeriesCreate, SeriesUpdate, SeriesList
+from app.schemas.series import Series, SeriesCreate, SeriesUpdate, SeriesList, SeriesSchedule
 from app.core.auth import require_active_user, require_editor_or_admin
 
 router = APIRouter()
@@ -28,9 +28,9 @@ def get_series(
     """Get all series - Public access"""
     return service.get_all_series(skip, limit, search, status)
 
-@router.get("/schedule", response_model=List[SeriesList])
+@router.get("/schedule", response_model=SeriesSchedule)
 def get_schedule(service: SeriesService = Depends(get_series_service)):
-    """Get schedule - Public access"""
+    """Get schedule grouped by day of week - Public access"""
     return service.get_schedule()
 
 @router.get("/{series_id}", response_model=Series)

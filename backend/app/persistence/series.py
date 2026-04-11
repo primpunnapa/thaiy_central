@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from typing import Optional, List
-from app.database.models import Series, Studio
+from app.database.models import Series
 
 class SeriesRepository:
     """Handles all database operations for Series"""
@@ -28,13 +28,8 @@ class SeriesRepository:
     def get_by_id(self, series_id: int):
         return self.db.query(Series).filter(Series.id == series_id).first()
     
-    def create(self, series_data: dict, studio_ids: Optional[List[int]] = None):
+    def create(self, series_data: dict):
         db_series = Series(**series_data)
-        
-        if studio_ids:
-            studios = self.db.query(Studio).filter(Studio.id.in_(studio_ids)).all()
-            db_series.studios = studios
-        
         self.db.add(db_series)
         self.db.commit()
         self.db.refresh(db_series)

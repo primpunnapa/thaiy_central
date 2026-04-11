@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, Table, Enum
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, Enum, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .session import Base
@@ -13,18 +13,12 @@ class PlatformEnum(str, enum.Enum):
     ONED = "oned"
     WETV = "wetv"
 
-# Association table
-series_studio = Table(
-    'series_studio',
-    Base.metadata,
-    Column('series_id', Integer, ForeignKey('series.id')),
-    Column('studio_id', Integer, ForeignKey('studios.id'))
-)
 
 class Series(Base):
     __tablename__ = "series"
     
     id = Column(Integer, primary_key=True, index=True)
+    studio_id = Column(Integer, ForeignKey('studios.id'), nullable=False)
     title_th = Column(String(200), nullable=False)
     title_en = Column(String(200), nullable=False)
     description = Column(Text)
@@ -34,21 +28,23 @@ class Series(Base):
     views = Column(Integer, default=0)
     air_day = Column(String(20), nullable=True)
     air_time = Column(String(10), nullable=True)
+    platforms = Column(JSON, default=list)
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
     # Relationships
-    studios = relationship("Studio", secondary=series_studio, backref="series")
+    studio = relationship("Studio", back_populates="series")
 
 class Studio(Base):
     __tablename__ = "studios"
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), unique=True, nullable=False)
-    platform = Column(Enum(PlatformEnum), nullable=False)
     website_url = Column(String(200))
     logo_url = Column(String(200))
+    # One-to-many relationship with series
+    series = relationship("Series", back_populates="studio")
 
 class UserRole(str, enum.Enum):
     NORMAL = "normal"

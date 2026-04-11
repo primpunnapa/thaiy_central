@@ -20,10 +20,10 @@ class StudioRepository:
         self.db.refresh(db_studio)
         return db_studio
     
-    def get_or_create_by_name(self, name: str, platform: str):
+    def get_or_create_by_name(self, name: str):
         studio = self.db.query(Studio).filter(Studio.name == name).first()
         if not studio:
-            studio = Studio(name=name, platform=platform)
+            studio = Studio(name=name)
             self.db.add(studio)
             self.db.commit()
             self.db.refresh(studio)

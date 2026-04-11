@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from app.core.config import settings
 from app.database.session import SessionLocal, engine, Base
-from app.database.models import Studio, User, Series, PlatformEnum, UserRole
+from app.database.models import Studio, User, Series, UserRole
 from app.core.auth import get_password_hash
 
 print("Waiting for database...")
@@ -28,14 +28,12 @@ db = SessionLocal()
 
 # Create Studios
 studios = [
-    Studio(name="iqiyi", platform=PlatformEnum.IQIYI),
-    Studio(name="viu", platform=PlatformEnum.VIU),
-    Studio(name="netflix", platform=PlatformEnum.NETFLIX),
-    Studio(name="aisplay", platform=PlatformEnum.AISPLAY),
-    Studio(name="oned", platform=PlatformEnum.ONED),
-    Studio(name="wetv", platform=PlatformEnum.WETV),
-    
+    Studio(name="GMMTV", website_url="https://www.gmm-tv.com"),
+    Studio(name="Mandee Work", website_url="https://www.facebook.com/MandeeWork"),
+    Studio(name="MeMindY", website_url="https://www.memindy.com"),
+    Studio(name="Star Hunter Entertainment", website_url="https://starhunterent.com"),
 ]
+
 db.add_all(studios)
 db.commit()
 
@@ -73,6 +71,7 @@ db.commit()
 # Create Series
 series_list = [
     Series(
+        studio_id=studios[0].id,
         title_th="มีสติหน่อยคุณธีร์",
         title_en="Me and Thee",
         description="A chance meeting leads photographer Peach to mentor wealthy businessman Thee, whose obsession with TV dramas and disconnect from real-world values needs a serious reality check.",
@@ -80,9 +79,10 @@ series_list = [
         status="completed",
         air_day="Saturday",
         air_time="20:30",
-        studios=[studios[0]]
+        platforms=["iqiyi"]
     ),
     Series(
+        studio_id=studios[1].id,
         title_th="นิ่งเฮียก็หาว่าซื่อ",
         title_en="Cutie Pie Series",
         description="Thai BL drama focusing on Kuea Keerati and Lian Kilen Wang, childhood friends engaged by family arrangement",
@@ -90,9 +90,10 @@ series_list = [
         status="completed",
         air_day="Saturday",
         air_time="22:30",
-        studios=[studios[0], studios[2]]
+        platforms=["viu", "netflix"]
     ),
     Series(
+        studio_id=studios[0].id,
         title_th="รักจริงหลังแต่ง",
         title_en="My Romance Scammer",
         description="The story of two con artists, Tim and Yu, who deceive wealthy heirs, Pai and North, into marriage to seize their fortune, only to fall in love with their targets",
@@ -100,7 +101,7 @@ series_list = [
         status="ongoing",
         air_day="Sunday",
         air_time="20:30",
-        studios=[studios[5]]
+        platforms=["wetv"]
     ),
 ]
 
