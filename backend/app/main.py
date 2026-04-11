@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import series, studio, user  # Changed from 'studio' to 'studios'
+from app.api import series, studio, user, auth
 from app.database.session import engine, Base
 
 # Create tables
@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(series.router, prefix="/api/series", tags=["Series"])
 app.include_router(studio.router, prefix="/api/studios", tags=["Studio"])
 app.include_router(user.router, prefix="/api/users", tags=["User"])

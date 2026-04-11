@@ -1,8 +1,10 @@
 import time
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
-from app.database.models import Base, Studio, User, Series, PlatformEnum
 from app.core.config import settings
+from app.database.session import SessionLocal, engine, Base
+from app.database.models import Studio, User, Series, PlatformEnum, UserRole
+from app.core.auth import get_password_hash
 
 print("Waiting for database...")
 max_retries = 5
@@ -39,9 +41,32 @@ db.commit()
 
 # Create Users
 users = [
-    User(username="admin", email="admin@bl.com", full_name="Admin User"),
-    User(username="editor", email="editor@bl.com", full_name="Content Editor"),
+    User(
+        username="normal_user",
+        email="user@blcentral.com",
+        full_name="Normal Fan",
+        hashed_password=get_password_hash("user123"),
+        role=UserRole.NORMAL,
+        is_active=True
+    ),
+    User(
+        username="content_editor",
+        email="editor@blcentral.com",
+        full_name="Content Editor",
+        hashed_password=get_password_hash("editor123"),
+        role=UserRole.EDITOR,
+        is_active=True
+    ),
+    User(
+        username="admin",
+        email="admin@blcentral.com",
+        full_name="System Admin",
+        hashed_password=get_password_hash("admin123"),
+        role=UserRole.ADMIN,
+        is_active=True
+    ),
 ]
+
 db.add_all(users)
 db.commit()
 
@@ -86,5 +111,8 @@ print("Database seeded!")
 print(f"Series: {len(series_list)}")
 print(f"Studios: {len(studios)}")
 print(f"Users: {len(users)}")
+print("Username: normal_user, Password: user123, Role: NORMAL")
+print("Username: content_editor, Password: editor123, Role: EDITOR")
+print("Username: admin, Password: admin123, Role: ADMIN")
 
 db.close()

@@ -19,6 +19,13 @@ class SeriesCreate(SeriesBase):
 class SeriesUpdate(SeriesBase):
     title_th: Optional[str] = None
     title_en: Optional[str] = None
+    description: Optional[str] = None
+    release_year: Optional[int] = None
+    poster_url: Optional[str] = None
+    status: Optional[str] = None
+    air_day: Optional[str] = None
+    air_time: Optional[str] = None
+    studio_ids: Optional[List[int]] = None
 
 class Series(SeriesBase):
     id: int

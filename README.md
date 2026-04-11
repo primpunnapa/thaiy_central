@@ -16,6 +16,8 @@ docker-compose exec backend python seed.py
 # 4. Check logs to make sure everything is running
 docker-compose logs
 
+# to stop everything
+docker-compose down -v
 
 ## without Docker
 # set up the backend
@@ -44,7 +46,7 @@ cd frontend
 ```bash
 npm install
 ```
-3. Start the React development server:
+3. Start the development server:
 ```bash
 npm run dev
 ```
