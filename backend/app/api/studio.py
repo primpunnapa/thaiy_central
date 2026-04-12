@@ -25,3 +25,24 @@ def create_studio(
         return service.create_studio(studio)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@router.delete("/{studio_id}", status_code=204)
+def delete_studio(
+    studio_id: int,
+    service: StudioService = Depends(get_studio_service)
+):
+    try:
+        service.delete_studio(studio_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+@router.put("/{studio_id}", response_model=Studio)
+def update_studio(
+    studio_id: int,
+    studio_data: StudioCreate,
+    service: StudioService = Depends(get_studio_service)
+):
+    try:
+        return service.update_studio(studio_id, studio_data)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

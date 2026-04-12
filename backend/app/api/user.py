@@ -38,6 +38,36 @@ def get_user(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
+@router.post("/", response_model=UserResponse, status_code=201)
+def create_user(
+    user_data: UserCreate,
+    db: Session = Depends(get_db),
+    admin: UserModel = Depends(require_admin)
+):
+    """Create new user (Admin only)"""
+    # Check if username exists
+    existing = db.query(UserModel).filter(UserModel.username == user_data.username).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Username already taken")
+    
+    # Check if email exists
+    existing_email = db.query(UserModel).filter(UserModel.email == user_data.email).first()
+    if existing_email:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Create user with specified role
+    new_user = UserModel(
+        username=user_data.username,
+        email=user_data.email,
+        password=user_data.password,
+        role=user_data.role
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    
+    return new_user 
+
 @router.put("/{user_id}", response_model=UserResponse)
 def update_user(
     user_id: int,
