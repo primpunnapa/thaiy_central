@@ -96,12 +96,12 @@ def require_admin(current_user: User = Depends(get_current_user)):
         )
     return current_user
 
-def require_editor_or_admin(current_user: User = Depends(get_current_user)):
-    """Require editor or admin role"""
-    if current_user.role not in [UserRole.EDITOR, UserRole.ADMIN]:
+def require_editor(current_user: User = Depends(get_current_user)):
+    """Require editor role"""
+    if current_user.role != UserRole.EDITOR:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Editor or Admin access required"
+            detail="Editor access required"
         )
     return current_user
 

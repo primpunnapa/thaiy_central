@@ -7,7 +7,7 @@ from app.persistence.series import SeriesRepository
 from app.persistence.studio import StudioRepository
 from app.business.series import SeriesService
 from app.schemas.series import Series, SeriesCreate, SeriesUpdate, SeriesList, SeriesSchedule
-from app.core.auth import require_active_user, require_editor_or_admin
+from app.core.auth import require_active_user, require_editor
 
 router = APIRouter()
 
@@ -44,14 +44,14 @@ def get_series_detail(
         raise HTTPException(status_code=404, detail="Series not found")
     return series
 
-# Editor and Admin only 
+# Editor only
 @router.post("/", response_model=Series, status_code=201)
 def create_series(
     series: SeriesCreate,
     service: SeriesService = Depends(get_series_service),
-    current_user: User = Depends(require_editor_or_admin)  # Create permission
+    current_user: User = Depends(require_editor)  # Create permission
 ):
-    """Create new series - Editor/Admin only"""
+    """Create new series - Editor only"""
     try:
         return service.create_series(series)
     except ValueError as e:
@@ -62,9 +62,9 @@ def update_series(
     series_id: int,
     series_update: SeriesUpdate,
     service: SeriesService = Depends(get_series_service),
-    current_user: User = Depends(require_editor_or_admin)  # Update permission
+    current_user: User = Depends(require_editor)  # Update permission
 ):
-    """Update series - Editor/Admin only"""
+    """Update series - Editor only"""
     updated = service.update_series(series_id, series_update)
     if not updated:
         raise HTTPException(status_code=404, detail="Series not found")
@@ -74,9 +74,9 @@ def update_series(
 def delete_series(
     series_id: int,
     service: SeriesService = Depends(get_series_service),
-    current_user: User = Depends(require_editor_or_admin)  # Delete permission
+    current_user: User = Depends(require_editor)  # Delete permission
 ):
-    """Delete series - Editor/Admin only"""
+    """Delete series - Editor only"""
     deleted = service.delete_series(series_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Series not found")
