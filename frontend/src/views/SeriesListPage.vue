@@ -78,7 +78,6 @@ onMounted(async () => {
 
     const merged = settled.map((r, i) => (r.status === 'fulfilled' ? r.value.data : baseSeries[i]))
     allSeries.value = merged
-    console.log('Fetched series (merged details):', allSeries.value)
   } catch (err) {
     console.error('Failed to fetch series:', err);
     allSeries.value = [];

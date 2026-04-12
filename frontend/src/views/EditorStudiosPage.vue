@@ -9,7 +9,6 @@ const showForm = ref(false)
 const editingId = ref(null)
 const error = ref('')
 
-const platforms = ['iqiyi', 'viu', 'netflix', 'aisplay', 'oned', 'wetv']
 
 const form = ref({
   name: '',
@@ -35,7 +34,7 @@ const fetchStudios = async () => {
   try {
     const response = await api.getStudios()
     studios.value = response.data
-  } catch (e) {
+  } catch {
     error.value = 'Failed to fetch studios'
   }
 }
@@ -85,7 +84,7 @@ const handleDelete = async (id) => {
   try {
     await api.deleteStudio(id)
     fetchStudios()
-  } catch (e) {
+  } catch{
     error.value = 'Failed to delete studio'
   }
 }

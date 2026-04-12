@@ -21,6 +21,16 @@ const dayLabels = {
   sunday: 'Sunday',
 }
 
+const platforms = ['iqiyi', 'viu', 'netflix', 'aisplay', 'oned', 'wetv']
+const platformLabels = {
+  iqiyi: 'iQIYI',
+  viu: 'Viu',
+  netflix: 'Netflix',
+  aisplay: 'AIS Play',
+  oned: 'One D',
+  wetv: 'WeTV'
+}
+
 const form = ref({
   title_th: '',
   title_en: '',
@@ -31,6 +41,7 @@ const form = ref({
   air_day: '',
   air_time: '',
   studio_id: null,
+  platforms: [],
 })
 
 const emptyForm = {
@@ -43,6 +54,7 @@ const emptyForm = {
   air_day: '',
   air_time: '',
   studio_id: null,
+  platforms: [],
 }
 
 onMounted(async () => {
@@ -97,6 +109,7 @@ const openEdit = (s) => {
     air_day: s.air_day || '',
     air_time: s.air_time || '',
     studio_id: s.studio_id || null,
+    platforms: s.platforms || [],
   }
   editingId.value = s.id
   showForm.value = true
@@ -139,7 +152,7 @@ const handleDelete = async (id) => {
   try {
     await api.deleteSeries(id)
     fetchData()
-  } catch (e) {
+  } catch {
     error.value = 'Failed to delete series'
   }
 }
@@ -223,23 +236,34 @@ const handleDelete = async (id) => {
             </div>
 
             <div class="grid grid-cols-2 gap-3">
+              <!-- Air Day -->
               <div>
-                <label class="text-sm font-medium text-foreground/60 mb-1 block">วันออกอากาศ</label>
+                <label class="text-sm font-medium text-foreground/60 mb-1 block">
+                  วันออกอากาศ
+                </label>
                 <select
                   v-model="form.air_day"
                   class="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="">-</option>
-                  <option v-for="d in days" :key="d" :value="d">{{ dayLabels[d] }}</option>
+                  <option v-for="d in days" :key="d" :value="d">
+                    {{ dayLabels[d] }}
+                  </option>
                 </select>
               </div>
-              <label class="text-sm font-medium text-foreground/60">เวลาที่ออกอากาศ</label>
+
+              <!-- Air Time -->
+              <div>
+                <label class="text-sm font-medium text-foreground/60 mb-1 block">
+                  เวลาที่ออกอากาศ
+                </label>
                 <input
                   v-model="form.air_time"
                   type="text"
                   placeholder="เวลา (เช่น 20:30)"
                   class="w-full px-4 py-2 rounded-xl border border-border bg-background text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary"
                 />
+              </div>
             </div>
 
             <div>
@@ -283,6 +307,31 @@ const handleDelete = async (id) => {
               </select>
             </div>
 
+            <div>
+              <label class="text-sm font-medium text-foreground/60 mb-2 block">Platforms</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label
+                  v-for="p in platforms"
+                  :key="p"
+                  class="flex items-center gap-2 cursor-pointer"
+                >
+                  <input
+                    :checked="form.platforms.includes(p)"
+                    @change="(e) => {
+                      if (e.target.checked) {
+                        form.platforms.push(p)
+                      } else {
+                        form.platforms = form.platforms.filter(x => x !== p)
+                      }
+                    }"
+                    type="checkbox"
+                    class="w-4 h-4 accent-primary rounded"
+                  />
+                  <span class="text-sm">{{ platformLabels[p] }}</span>
+                </label>
+              </div>
+            </div>
+
             <div v-if="error" class="text-sm text-rose">{{ error }}</div>
 
             <button
@@ -303,7 +352,8 @@ const handleDelete = async (id) => {
           <thead>
             <tr class="border-b border-border bg-muted/50">
               <th class="text-left px-4 py-3 font-medium text-foreground/60">Name</th>
-              <th class="text-left px-4 py-3 font-medium text-foreground/60">Year</th>              <th class="text-left px-4 py-3 font-medium text-foreground/60">Status</th>
+              <th class="text-left px-4 py-3 font-medium text-foreground/60">Year</th>
+              <th class="text-left px-4 py-3 font-medium text-foreground/60">Status</th>
               <th class="text-left px-4 py-3 font-medium text-foreground/60">Studio</th>
               <th class="text-right px-4 py-3 font-medium text-foreground/60">Actions</th>
             </tr>
@@ -320,18 +370,6 @@ const handleDelete = async (id) => {
                   <div class="text-xs text-foreground/60">{{ s.title_th }}</div>
                 </td>
                 <td class="px-4 py-3 text-foreground/60">{{ s.release_year }}</td>
-                 <td class="px-4 py-3">
-                  <span
-                    :class="[
-                      'px-2 py-0.5 rounded-full text-xs font-medium',
-                      s.status === 'ongoing'
-                        ? 'bg-primary/10 text-primary'
-                        : 'bg-muted text-foreground/60',
-                    ]"
-                  >
-                    {{ s.status === 'ongoing' ? 'กำลังฉาย' : 'จบแล้ว' }}
-                  </span>
-                </td>
                 <td class="px-4 py-3">
                   <span
                     :class="[

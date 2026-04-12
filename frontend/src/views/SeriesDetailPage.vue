@@ -105,7 +105,7 @@
                 'rounded-lg px-4 py-3'
               ]"
             >
-              <p class="font-medium text-foreground capitalize">{{ platform }}</p>
+              <p class="font-medium text-foreground">{{ platformLabels[platform] }}</p>
             </div>
           </div>
         </div>
@@ -131,6 +131,15 @@ const platformColors = {
   aisplay: 'bg-peach',
   oned: 'bg-sky',
   wetv: 'bg-accent',
+}
+
+const platformLabels = {
+  iqiyi: 'iQIYI',
+  viu: 'Viu',
+  netflix: 'Netflix',
+  aisplay: 'AIS Play',
+  oned: 'One D',
+  wetv: 'WeTV'
 }
 
 onMounted(async () => {

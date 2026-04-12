@@ -48,7 +48,6 @@ onMounted(async () => {
 const fetchUsers = async () => {
   try {
     const response = await api.getUsers()
-    console.log('Fetched users:', response.data)
     users.value = response.data
   } catch (e) {
     console.error('Failed to fetch users', e)

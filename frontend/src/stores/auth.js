@@ -17,7 +17,6 @@ export const useAuthStore = defineStore('auth', () => {
     error.value = null
     try {
       const response = await api.login(username, password)
-      console.log('API Response:', response)
       token.value = response.access_token
       user.value = response.user
       localStorage.setItem('token', response.access_token)

@@ -42,6 +42,12 @@
         >
           {{ loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ' }}
         </button>
+
+        <!-- Link to register -->
+        <p class="text-center text-sm text-muted-foreground mt-4">
+          ยังไม่มีบัญชี?
+          <router-link to="/register" class="text-primary hover:underline">สมัครสมาชิก</router-link>
+        </p>
       </form>
     </div>
   </div>
@@ -66,7 +72,6 @@ const handleSubmit = async (e) => {
   loading.value = true
 
   try {
-    console.log('Attempting login with:', username.value)
     const success = await auth.login(username.value, password.value)
 
     if (success) {

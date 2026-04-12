@@ -14,6 +14,7 @@ import UserProfilePage from './views/UserProfilePage.vue'
 import AdminUsersPage from './views/AdminUsersPage.vue'
 import EditorSeriesPage from './views/EditorSeriesPage.vue'
 import EditorStudiosPage from './views/EditorStudiosPage.vue'
+import RegisterPage from './views/RegisterPage.vue'
 
 const routes = [
   {
@@ -65,6 +66,11 @@ const routes = [
     path: '/editor/studios',
     name: 'editor-studios',
     component: EditorStudiosPage
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterPage
   }
 ]
 

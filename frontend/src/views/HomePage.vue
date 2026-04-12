@@ -8,23 +8,20 @@
             <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2L15.09 8.26H21.77L16.88 12.19L17.97 18.45L12 14.56L6.03 18.45L7.12 12.19L2.23 8.26H8.91L12 2Z" />
             </svg>
-            <span class="text-sm font-medium text-primary">Thai BL Series Hub</span>
+            <span class="text-md font-medium text-primary">Thai BL Series Hub</span>
           </div>
           <h1 class="font-heading text-4xl md:text-6xl font-bold text-foreground leading-tight">
             รวมซีรีส์วายไทย
             <br />
             <span class="text-primary">ครบทุกเรื่อง</span>
           </h1>
-          <p class="mt-4 text-lg text-foreground/70 max-w-lg">
+          <p class="mt-4 text-lg text-foreground/70 max-w-md">
             ค้นหาข้อมูลซีรีส์วายไทย ตารางออกอากาศ สตูดิโอ และแพลตฟอร์มรับชม ทั้งหมดในที่เดียว
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
             <Button as-child size="lg" class="rounded-full">
               <router-link to="/series">
                 ดูซีรีส์ทั้งหมด
-                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7m0 0l-7 7m7-7H5" />
-                </svg>
               </router-link>
             </Button>
             <Button as-child variant="outline" size="lg" class="rounded-full">
