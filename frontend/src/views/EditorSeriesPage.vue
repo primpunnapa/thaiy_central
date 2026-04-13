@@ -260,7 +260,7 @@ const handleDelete = async (id) => {
                 <input
                   v-model="form.air_time"
                   type="text"
-                  placeholder="เวลา (เช่น 20:30)"
+                  placeholder="20:30"
                   class="w-full px-4 py-2 rounded-xl border border-border bg-background text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>

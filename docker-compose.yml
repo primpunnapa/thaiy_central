@@ -4,9 +4,9 @@ services:
     image: postgres:15-alpine
     container_name: bl-postgres
     environment:
-      POSTGRES_USER: bladmin
-      POSTGRES_PASSWORD: blpass
-      POSTGRES_DB: blcentral
+      POSTGRES_USER: env('POSTGRES_USER', 'bladmin')
+      POSTGRES_PASSWORD: env('POSTGRES_PASSWORD', 'blpass')
+      POSTGRES_DB: env('POSTGRES_DB', 'blcentral')
     ports:
       - "5432:5432"
     volumes:

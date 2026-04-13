@@ -85,16 +85,6 @@ const handleLogout = () => {
               : 'text-foreground/70 hover:bg-muted hover:text-foreground'
           ]"
         >
-          <!-- Icon based on type -->
-          <svg v-if="link.icon === 'users'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 8.048M12 4.354a4 4 0 110 8.048M12 4.354V2m2.879 15.854a4 4 0 11-5.758 0M15.879 17.904a4 4 0 11-5.758 0" />
-          </svg>
-          <svg v-else-if="link.icon === 'film'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16m10-16v16m-10-4h10M7 8h10m0 8H7" />
-          </svg>
-          <svg v-else-if="link.icon === 'building'" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5.581m0 0H9m5.581 0a2 2 0 100-4 2 2 0 000 4z" />
-          </svg>
           {{ link.label }}
         </router-link>
 
@@ -178,7 +168,7 @@ const handleLogout = () => {
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          Admin Panel
+          Panel
         </div>
         <router-link
           v-for="link in adminLinks"
@@ -192,15 +182,6 @@ const handleLogout = () => {
               : 'text-foreground/70 hover:bg-muted'
           ]"
         >
-          <svg v-if="link.icon === 'users'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 8.048M12 4.354a4 4 0 110 8.048M12 4.354V2m2.879 15.854a4 4 0 11-5.758 0M15.879 17.904a4 4 0 11-5.758 0" />
-          </svg>
-          <svg v-else-if="link.icon === 'film'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16m10-16v16m-10-4h10M7 8h10m0 8H7" />
-          </svg>
-          <svg v-else-if="link.icon === 'building'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5.581m0 0H9m5.581 0a2 2 0 100-4 2 2 0 000 4z" />
-          </svg>
           {{ link.label }}
         </router-link>
       </template>
@@ -213,7 +194,7 @@ const handleLogout = () => {
           @click="open = false"
           class="block px-6 py-3 text-sm font-medium text-foreground/70 hover:bg-muted flex items-center gap-2"
         >
-          <span class="text-xs font-bold">👤</span> {{ auth.user.username }}
+        {{ auth.user.username }}
         </router-link>
         <button
           @click="handleLogout"

@@ -77,24 +77,37 @@ const defaultSchedule = [
 
 onMounted(async () => {
   loading.value = true;
+
   try {
     const response = await api.getSchedule();
     const data = response.data;
 
-    // Transform API response to expected format
-    if (data && typeof data === "object") {
-      // If it's an object with day keys
-      const transformed = Object.entries(data).map(([day, series]) => ({
-        day,
-        series: Array.isArray(series) ? series : [],
-      }));
-      scheduleData.value = transformed.length > 0 ? transformed : defaultSchedule;
-    } else if (Array.isArray(data)) {
-      // If it's already an array
-      scheduleData.value = data;
-    } else {
-      scheduleData.value = defaultSchedule;
-    }
+    // Transform schedule to array
+    const transformed = Object.entries(data).map(([day, series]) => ({
+      day,
+      series: Array.isArray(series) ? series : [],
+    }));
+    const allSeries = transformed.flatMap((d) => d.series);
+
+    const detailResults = await Promise.allSettled(
+      allSeries.map((s) => api.getSeriesDetail(s.id))
+    );
+
+    const detailMap = {};
+    detailResults.forEach((res, i) => {
+      if (res.status === "fulfilled") {
+        detailMap[allSeries[i].id] = res.value.data;
+      }
+    });
+
+    scheduleData.value = transformed.map((d) => ({
+      day: d.day,
+      series: d.series.map((s) => ({
+        ...s,
+        ...(detailMap[s.id] || {}), // merge detail
+      })),
+    }));
+
   } catch (err) {
     console.error("Failed to fetch schedule:", err);
     scheduleData.value = defaultSchedule;
@@ -103,6 +116,7 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
 </script>
 
 <style scoped>

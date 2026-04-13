@@ -40,7 +40,13 @@
             </a>
             </div>
           <div :class="`w-12 h-12 rounded-lg ${studioColors[i % studioColors.length]} flex items-center justify-center`">
-            <Building2 class="w-6 h-6 text-foreground/70" />
+             <img
+              v-if="studio.logo_url"
+              :src="studio.logo_url"
+              :alt="studio.name"
+              class="w-10 h-10 rounded"
+            />
+            <Building2 v-else class="w-6 h-6 text-foreground/70" />
           </div>
         </div>
       </div>

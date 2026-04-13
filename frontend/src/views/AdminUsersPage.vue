@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { UserPen } from '@lucide/vue';
 import api from '@/lib/api'
 
 const auth = useAuthStore()
@@ -9,23 +10,23 @@ const showForm = ref(false)
 const editingId = ref(null)
 const error = ref('')
 
-const roles = ['admin', 'content_editor', 'normal_user']
+const roles = ['admin', 'editor', 'normal']
 const roleLabelMap = {
   admin: 'Admin',
-  content_editor: 'Content Editor',
-  normal_user: 'User',
+  editor: 'Content Editor',
+  normal: 'User',
 }
 const roleColorMap = {
   admin: 'bg-rose/10 text-rose',
-  content_editor: 'bg-primary/10 text-primary',
-  normal_user: 'bg-muted text-foreground/60',
+  editor: 'bg-primary/10 text-primary',
+  normal: 'bg-muted text-foreground/60',
 }
 
 const form = ref({
   username: '',
   email: '',
   password: '',
-  role: 'normal_user',
+  role: 'normal',
   is_active: true,
 })
 
@@ -33,7 +34,7 @@ const emptyForm = {
   username: '',
   email: '',
   password: '',
-  role: 'normal_user',
+  role: 'normal',
   is_active: true,
 }
 
@@ -113,11 +114,9 @@ const handleDelete = async (id) => {
 <template>
   <div class="container mx-auto px-4 py-8 max-w-4xl">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex justify-between mb-6">
       <h1 class="font-heading text-3xl font-bold flex items-center gap-2">
-        <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 8.048M12 4.354a4 4 0 110 8.048M12 4.354V2m2.879 15.854a4 4 0 11-5.758 0M15.879 17.904a4 4 0 11-5.758 0" />
-        </svg>
+        <UserPen class="w-6 h-6 text-primary" />
         จัดการผู้ใช้
       </h1>
       <button
