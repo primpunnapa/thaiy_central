@@ -17,7 +17,7 @@ ThaiY is a project designed to provide comprehensive information about Thai Boys
 ## Project Description
 
 ### Problem Statement
-Thai BL content is scattered across multiple platforms (YouTube, iQIYI, Viu, LineTV, GMMTV). Fans struggle to find:
+Thai BL content is scattered across multiple platforms (WeTV, iQIYI, Viu, GMMTV). Fans struggle to find:
 
 - Where to watch their favorite series
 
@@ -29,7 +29,7 @@ During popular series premieres, smaller information sites often crash due to su
 
 ### Solution
 
-ThaiY provides a centralized, reliable, and scalable entry point that:
+ThaiY provides a centralized, reliable, and user-friendly entry point that:
 
 - Aggregates series metadata from all major Thai BL studios
 
@@ -62,7 +62,7 @@ ThaiY supports three user roles with different access levels:
 ### 1. **Admin**
 - **Resposibility:**
   User account management (create, update, delete, role assignment)
-- **Access:** `/admin/users`, `/profile`
+- **Access:** `/admin/users`, `/profile`, `/series`, `/schedule`, `/studios`
 
 ### 2. **Content Editor**
 - **Resposibilities:**
@@ -70,7 +70,7 @@ ThaiY supports three user roles with different access levels:
   - Manage studio information
   - Update broadcasting schedules
   - Add/remove streaming platform
-- **Access:** `/editor/series`, `/editor/studios`, `/profile`
+- **Access:** `/editor/series`, `/editor/studios`, `/profile`, `/series`, `/schedule`, `/studios`
 
 ### 3. **Normal User**
 - **Permissions:**
@@ -151,7 +151,7 @@ docker-compose logs -f
 
 # Services will be available at:
 # - Frontend: http://localhost:5173
-# - Backend API: http://localhost:8000/docs
+# - Backend API: http://localhost:8000
 # - Database: localhost:5432
 ```
 
