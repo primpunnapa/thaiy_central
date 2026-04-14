@@ -7,11 +7,12 @@ from app.persistence.series import SeriesRepository
 from app.persistence.studio import StudioRepository
 from app.business.series import SeriesService
 from app.schemas.series import Series, SeriesCreate, SeriesUpdate, SeriesList, SeriesSchedule
-from app.core.auth import require_active_user, require_editor
+from app.core.auth import get_current_user, require_editor
 
 router = APIRouter()
 
-def get_series_service(db: Session = Depends(get_db)):
+def get_series_service(db: Session = Depends(get_db)) -> SeriesService:
+    """Service factory - API instantiates Repositories and passes to Service"""
     series_repo = SeriesRepository(db)
     studio_repo = StudioRepository(db)
     return SeriesService(series_repo, studio_repo)
@@ -49,7 +50,6 @@ def get_series_detail(
 def create_series(
     series: SeriesCreate,
     service: SeriesService = Depends(get_series_service),
-    current_user: User = Depends(require_editor)  # Create permission
 ):
     """Create new series - Editor only"""
     try:
@@ -62,7 +62,6 @@ def update_series(
     series_id: int,
     series_update: SeriesUpdate,
     service: SeriesService = Depends(get_series_service),
-    current_user: User = Depends(require_editor)  # Update permission
 ):
     """Update series - Editor only"""
     updated = service.update_series(series_id, series_update)
@@ -74,7 +73,6 @@ def update_series(
 def delete_series(
     series_id: int,
     service: SeriesService = Depends(get_series_service),
-    current_user: User = Depends(require_editor)  # Delete permission
 ):
     """Delete series - Editor only"""
     deleted = service.delete_series(series_id)

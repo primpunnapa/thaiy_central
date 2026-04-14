@@ -1,38 +1,30 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from datetime import datetime, timezone
 from app.database.session import get_db
-from app.database.models import User, UserRole
-from app.schemas.auth import LoginRequest, LoginResponse, UserCreate, UserResponse, UserUpdate
-from app.core.auth import (
-    authenticate_user, create_access_token, get_password_hash,
-    get_current_user, require_admin
-)
+from app.database.models import User
+from app.persistence.user import UserRepository
+from app.business.auth import AuthService
+from app.schemas.auth import LoginRequest, LoginResponse, UserCreate, UserResponse
+from app.core.auth import get_current_user
 
 router = APIRouter()
 
+def get_auth_service(db: Session = Depends(get_db)):
+    """Service factory - API instantiates Repository and passes to Service"""
+    user_repo = UserRepository(db)
+    return AuthService(user_repo)
+
 @router.post("/login", response_model=LoginResponse)
-def login(request: LoginRequest, db: Session = Depends(get_db)):
+def login(request: LoginRequest, service: AuthService = Depends(get_auth_service)):
     """Login and get access token"""
-    user = authenticate_user(db, request.username, request.password)
-    if not user:
+    try:
+        return service.login(request.username, request.password)
+    except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail=str(e),
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
-    # Update last login
-    user.last_login = datetime.now(timezone.utc)
-    db.commit()
-    
-    # Create access token
-    access_token = create_access_token(data={"sub": user.username})
-    
-    return LoginResponse(
-        access_token=access_token,
-        user=UserResponse.model_validate(user)
-    )
 
 @router.post("/logout")
 def logout(current_user: User = Depends(get_current_user)):
@@ -45,29 +37,9 @@ def get_me(current_user: User = Depends(get_current_user)):
     return current_user
 
 @router.post("/register", response_model=UserResponse)
-def register(user_data: UserCreate, db: Session = Depends(get_db)):
+def register(user_data: UserCreate, service: AuthService = Depends(get_auth_service)):
     """Register new user (normal users only)"""
-    # Check if username exists
-    existing = db.query(User).filter(User.username == user_data.username).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Username already taken")
-    
-    # Check if email exists
-    existing_email = db.query(User).filter(User.email == user_data.email).first()
-    if existing_email:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # Force role to NORMAL for self-registration
-    new_user = User(
-        username=user_data.username,
-        email=user_data.email,
-        full_name=user_data.full_name,
-        hashed_password=get_password_hash(user_data.password),
-        role=UserRole.NORMAL
-    )
-    
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    return new_user
+    try:
+        return service.register(user_data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

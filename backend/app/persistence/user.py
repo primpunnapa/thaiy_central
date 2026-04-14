@@ -16,9 +16,28 @@ class UserRepository:
     def get_by_username(self, username: str):
         return self.db.query(User).filter(User.username == username).first()
     
+    def get_by_email(self, email: str):
+        return self.db.query(User).filter(User.email == email).first()
+    
     def create(self, user_data: dict):
         db_user = User(**user_data)
         self.db.add(db_user)
         self.db.commit()
         self.db.refresh(db_user)
         return db_user
+    
+    def update(self, user_id: int, user_data: dict):
+        user = self.get_by_id(user_id)
+        if user:
+            for key, value in user_data.items():
+                setattr(user, key, value)
+            self.db.commit()
+            self.db.refresh(user)
+        return user
+    
+    def delete(self, user_id: int):
+        user = self.get_by_id(user_id)
+        if user:
+            self.db.delete(user)
+            self.db.commit()
+        return user
