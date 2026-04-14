@@ -32,9 +32,11 @@ class Series(Base):
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    updated_by_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     
     # Relationships
     studio = relationship("Studio", back_populates="series")
+    updated_by = relationship("User", back_populates="updated_series")
 
 class Studio(Base):
     __tablename__ = "studios"
@@ -43,8 +45,11 @@ class Studio(Base):
     name = Column(String(50), unique=True, nullable=False)
     website_url = Column(String(200))
     logo_url = Column(String(200))
-    # One-to-many relationship with series
+    updated_by_id = Column(Integer, ForeignKey('users.id'), nullable=True)
+
+    # One-to-many relationship with series and user
     series = relationship("Series", back_populates="studio")
+    updated_by = relationship("User", back_populates="updated_studios")
 
 class UserRole(str, enum.Enum):
     NORMAL = "normal"
@@ -63,3 +68,6 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     last_login = Column(DateTime(timezone=True), nullable=True)
+
+    updated_series = relationship("Series", back_populates="updated_by")
+    updated_studios = relationship("Studio", back_populates="updated_by")

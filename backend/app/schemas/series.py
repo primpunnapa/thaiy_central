@@ -16,7 +16,7 @@ class SeriesBase(BaseModel):
     platforms: List[str] = []
 
 class SeriesCreate(SeriesBase):
-    pass
+    updated_by_id: Optional[int] = None
 
 class SeriesUpdate(BaseModel):
     title_th: Optional[str] = None
@@ -29,6 +29,7 @@ class SeriesUpdate(BaseModel):
     air_time: Optional[str] = None
     studio_id: Optional[int] = None
     platforms: Optional[List[str]] = None
+    updated_by_id: Optional[int] = None
 
 class Series(SeriesBase):
     id: int
