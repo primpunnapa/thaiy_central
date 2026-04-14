@@ -123,8 +123,22 @@ ThaiY supports three user roles with different access levels:
 git clone https://github.com/primpunnapa/thaiy_central.git
 cd thaiy
 
-# 2. Build and start all services
-docker-compose up -d
+# 2. Create .env file with database credentials
+cat > .env << EOF
+POSTGRES_USER=your-db-user
+POSTGRES_PASSWORD=your-db-password
+POSTGRES_DB=your-db-name
+ENVIRONMENT=development
+SECRET_KEY=your-secret-key-change-in-production
+EOF
+
+# 3. go to frontend and install dependencies
+cd frontend
+npm install
+
+# 4. go back to root and start all services
+cd ..
+docker-compose up --build -d
 
 # 3. Wait for PostgreSQL to initialize, then seed the database
 docker-compose exec backend python seed.py
@@ -137,7 +151,7 @@ docker-compose logs -f
 
 # Services will be available at:
 # - Frontend: http://localhost:5173
-# - Backend API: http://localhost:8000
+# - Backend API: http://localhost:8000/docs
 # - Database: localhost:5432
 ```
 
@@ -155,7 +169,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Create PostgreSQL database
+# 4. Create PostgreSQL database (must have PostgreSQL installed and running)
 # Using psql:
 psql -U postgres -c "CREATE DATABASE thaiy_db;"
 
@@ -167,6 +181,8 @@ cat > .env << EOF
 POSTGRES_USER=your-db-user
 POSTGRES_PASSWORD=your-db-password
 POSTGRES_DB=your-db-name
+ENVIRONMENT=development
+SECRET_KEY=your-secret-key-change-in-production
 EOF
 
 # 6. Seed initial data (optional)
@@ -206,21 +222,15 @@ docker-compose up -d
 # View logs
 docker-compose logs -f
 
-# View logs for specific service
-docker-compose logs -f backend
-docker-compose logs -f frontend
-
 # Seed database (one-time after first start)
 docker-compose exec backend python seed.py
 
 # Stop all services
 docker-compose down
 
-# Stop and remove all volumes (clean slate)
+# Stop and remove all volumes
 docker-compose down -v
 
-# Rebuild after changes
-docker-compose up -d --build
 
 ```
 

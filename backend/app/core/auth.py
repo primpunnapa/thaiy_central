@@ -7,14 +7,15 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.database.models import User, UserRole
+import os
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # JWT configuration
-SECRET_KEY = "your-secret-key-change-in-production-2024"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 480  # 8 hours
+ACCESS_TOKEN_EXPIRE_MINUTES = 480
 
 # Security scheme
 security = HTTPBearer()

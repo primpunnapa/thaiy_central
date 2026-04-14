@@ -5,9 +5,9 @@ from app.database.session import get_db
 from app.database.models import User as UserModel
 from app.persistence.user import UserRepository
 from app.business.user import UserService
-from app.schemas.user import User, UserCreate
+from app.schemas.user import UserCreate
 from app.schemas.auth import UserResponse, UserUpdate
-from app.core.auth import require_admin
+from app.core.auth import require_admin, get_password_hash
 
 router = APIRouter()
 
@@ -59,7 +59,7 @@ def create_user(
     new_user = UserModel(
         username=user_data.username,
         email=user_data.email,
-        password=user_data.password,
+        hashed_password=get_password_hash(user_data.password),
         role=user_data.role
     )
     db.add(new_user)
@@ -81,6 +81,12 @@ def update_user(
         raise HTTPException(status_code=404, detail="User not found")
     
     update_data = user_update.model_dump(exclude_unset=True)
+    
+    # Hash password if provided
+    if 'password' in update_data and update_data['password']:
+        update_data['hashed_password'] = get_password_hash(update_data['password'])
+        del update_data['password']
+    
     for key, value in update_data.items():
         setattr(user, key, value)
     
