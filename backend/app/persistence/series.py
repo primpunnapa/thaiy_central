@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
-from typing import Optional, List
+from typing import Optional
 from app.database.models import Series
 
 class SeriesRepository:

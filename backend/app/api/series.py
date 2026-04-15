@@ -7,7 +7,7 @@ from app.persistence.series import SeriesRepository
 from app.persistence.studio import StudioRepository
 from app.business.series import SeriesService
 from app.schemas.series import Series, SeriesCreate, SeriesUpdate, SeriesList, SeriesSchedule
-from app.core.auth import get_current_user, require_editor
+from app.core.auth import require_editor
 
 router = APIRouter()
 
