@@ -480,10 +480,13 @@ curl -X 'POST' \
 > - Login/Register pages
 ![Login Page|100x100](screenshots/login.png)
 ![Register Page|100x100](screenshots/signin.png)
+> - Profile page with user info
+![Profile Page|100x100](screenshots/profile.png)
 > - Admin user management page
 ![Admin Users|100x100](screenshots/usermanage.png)
 > - Editor series management 
 ![Editor Series|100x100](screenshots/seriesmanage.png)
 ![Editor Series Form|100x100](screenshots/editseries.png)
+![Editor Series Form2|100x100](screenshots/editseries2.png)
 > - Studios page with platform badges
 ![Editor Studio|100x100](screenshots/studiomanage.png)
