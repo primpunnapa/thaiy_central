@@ -58,10 +58,10 @@ ThaiY provides a centralized, reliable, and user-friendly entry point that:
 ![software-architecture](screenshots/softwarearchitecture.png)
 | Layer | Purpose | Components |
 |-------|---------|------------|
-| **API Layer** | HTTP endpoints & routing | `app/api/*.py` (auth, series, studios, user) |
-| **Business Logic** | Core application logic, validation, business rules | `app/business/*.py` (AuthService, SeriesService, StudioService, UserService) |
-| **Persistence** | Database query abstraction & operations | `app/persistence/*.py` (Repositories) |
-| **Database** | Data storage & relationships | `app/database/*.py` PostgreSQL + SQLAlchemy ORM |
+| **Presentation** | HTTP endpoints & routing | `app/api/*.py` (auth, series, studios, user) |
+| **Business** | Core application logic, validation, business rules | `app/business/*.py` (AuthService, SeriesService, StudioService, UserService) |
+| **Persistence** | Database query abstraction & operations | `app/persistence/*.py` (SeriesRepository, StudioRepository, UserRepository) |
+| **Database** | Data storage & relationships | `app/database/*.py` (PostgreSQL + SQLAlchemy ORM) |
 
 ---
 
@@ -72,7 +72,7 @@ ThaiY supports three user roles with different access levels:
 ### 1. **Admin**
 - **Resposibility:**
   User account management (create, update, delete, role assignment)
-- **Access:** `/admin/users`, `/profile`, `/series`, `/schedule`, `/studios`
+- **Access:** `/admin/users`, `/profile`, `/series`, `/schedule`, `/studios`, `/login`
 
 ### 2. **Content Editor**
 - **Resposibilities:**
@@ -80,7 +80,7 @@ ThaiY supports three user roles with different access levels:
   - Manage studio information
   - Update broadcasting schedules
   - Add/remove streaming platform
-- **Access:** `/editor/series`, `/editor/studios`, `/profile`, `/series`, `/schedule`, `/studios`
+- **Access:** `/editor/series`, `/editor/studios`, `/profile`, `/series`, `/schedule`, `/studios`, `/login`
 
 ### 3. **Normal User**
 - **Permissions:**
@@ -88,7 +88,7 @@ ThaiY supports three user roles with different access levels:
   - View series details
   - View broadcasting schedules
   - Access streaming platforms and studios
-- **Access:** `/series`, `/schedule`, `/studios`, `/profile`
+- **Access:** `/series`, `/schedule`, `/studios`, `/profile`, `/login`, `/register`
 
 ---
 
