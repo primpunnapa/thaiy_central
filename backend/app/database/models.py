@@ -12,6 +12,7 @@ class PlatformEnum(str, enum.Enum):
     AISPLAY = "aisplay"
     ONED = "oned"
     WETV = "wetv"
+    YOUTUBE = "youtube"
 
 
 class Series(Base):
@@ -29,6 +30,7 @@ class Series(Base):
     air_day = Column(String(20), nullable=True)
     air_time = Column(String(10), nullable=True)
     platforms = Column(JSON, default=list)
+    platform_urls = Column(JSON, default=dict)  # {"youtube": "url", "iqiyi": "url", etc}
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

@@ -105,7 +105,16 @@
                 'rounded-lg px-4 py-3'
               ]"
             >
-              <p class="font-medium text-foreground">{{ platformLabels[platform] }}</p>
+              <a
+                v-if="series.platform_urls?.[platform]"
+                :href="series.platform_urls[platform]"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium text-foreground hover:underline"
+              >
+                {{ platformLabels[platform] }}
+              </a>
+              <span v-else class="font-medium text-foreground">{{ platformLabels[platform] }}</span>
             </div>
           </div>
         </div>

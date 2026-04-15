@@ -14,6 +14,7 @@ class SeriesBase(BaseModel):
     air_time: Optional[str] = None
     studio_id: int
     platforms: List[str] = []
+    platform_urls: dict = {}  # e.g. {"youtube": "https://youtube.com/...", "iqiyi": "https://..."}
 
 class SeriesCreate(SeriesBase):
     updated_by_id: Optional[int] = None
@@ -29,6 +30,7 @@ class SeriesUpdate(BaseModel):
     air_time: Optional[str] = None
     studio_id: Optional[int] = None
     platforms: Optional[List[str]] = None
+    platform_urls: Optional[dict] = None
     updated_by_id: Optional[int] = None
 
 class Series(SeriesBase):

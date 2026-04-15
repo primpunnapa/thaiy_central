@@ -21,14 +21,15 @@ const dayLabels = {
   sunday: 'Sunday',
 }
 
-const platforms = ['iqiyi', 'viu', 'netflix', 'aisplay', 'oned', 'wetv']
+const platforms = ['iqiyi', 'viu', 'netflix', 'aisplay', 'oned', 'wetv', 'youtube']
 const platformLabels = {
   iqiyi: 'iQIYI',
   viu: 'Viu',
   netflix: 'Netflix',
   aisplay: 'AIS Play',
   oned: 'One D',
-  wetv: 'WeTV'
+  wetv: 'WeTV',
+  youtube: 'YouTube'
 }
 
 const form = ref({
@@ -42,6 +43,7 @@ const form = ref({
   air_time: '',
   studio_id: null,
   platforms: [],
+  platform_urls: {},
 })
 
 const emptyForm = {
@@ -55,6 +57,7 @@ const emptyForm = {
   air_time: '',
   studio_id: null,
   platforms: [],
+  platform_urls: {},
 }
 
 onMounted(async () => {
@@ -110,6 +113,7 @@ const openEdit = (s) => {
     air_time: s.air_time || '',
     studio_id: s.studio_id || null,
     platforms: s.platforms || [],
+    platform_urls: s.platform_urls || {},
   }
   editingId.value = s.id
   showForm.value = true
@@ -335,6 +339,22 @@ const handleDelete = async (id) => {
                   />
                   <span class="text-sm">{{ platformLabels[p] }}</span>
                 </label>
+              </div>
+            </div>
+
+            <!-- Platform URLs -->
+            <div v-if="form.platforms.length > 0">
+              <label class="text-sm font-medium text-foreground/60 mb-2 block">Platform URLs</label>
+              <div class="space-y-2">
+                <div v-for="p in form.platforms" :key="p" class="flex flex-col gap-1">
+                  <label class="text-xs text-foreground/50">{{ platformLabels[p] }} URL</label>
+                  <input
+                    v-model="form.platform_urls[p]"
+                    type="url"
+                    :placeholder="`https://example.com/${p}`"
+                    class="w-full px-3 py-2 rounded-lg border border-border bg-background text-foreground placeholder:text-foreground/30 text-xs focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
               </div>
             </div>
 
