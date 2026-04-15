@@ -53,6 +53,16 @@ ThaiY provides a centralized, reliable, and user-friendly entry point that:
 ## System Architecture
 
 ![system-architecture](screenshots/systemarchitecture.png)
+
+### Software Architecture
+![software-architecture](screenshots/softwarearchitecture.png)
+| Layer | Purpose | Components |
+|-------|---------|------------|
+| **API Layer** | HTTP endpoints & routing | `app/api/*.py` (auth, series, studios, user) |
+| **Business Logic** | Core application logic, validation, business rules | `app/business/*.py` (AuthService, SeriesService, StudioService, UserService) |
+| **Persistence** | Database query abstraction & operations | `app/persistence/*.py` (Repositories) |
+| **Database** | Data storage & relationships | `app/database/*.py` PostgreSQL + SQLAlchemy ORM |
+
 ---
 
 ## User Roles & Permissions
@@ -114,7 +124,7 @@ ThaiY supports three user roles with different access levels:
 
 ### Prerequisites
 - Docker & Docker Compose (recommended)
-- OR: Python 3.10+, Node.js 16+, PostgreSQL
+- OR: Python 3.10+, Node.js 20+, PostgreSQL
 
 ### Option 1: Docker Setup (Recommended)
 

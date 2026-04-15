@@ -15,6 +15,7 @@ import AdminUsersPage from './views/AdminUsersPage.vue'
 import EditorSeriesPage from './views/EditorSeriesPage.vue'
 import EditorStudiosPage from './views/EditorStudiosPage.vue'
 import RegisterPage from './views/RegisterPage.vue'
+import { useAuthStore } from './stores/auth'
 
 const routes = [
   {
@@ -28,9 +29,15 @@ const routes = [
     component: LoginPage
   },
   {
+    path: '/register',
+    name: 'register',
+    component: RegisterPage
+  },
+  {
     path: '/profile',
     name: 'profile',
-    component: UserProfilePage
+    component: UserProfilePage,
+    meta: { requiresAuth: true }
   },
   {
     path: '/series/:id',
@@ -55,28 +62,54 @@ const routes = [
   {
     path: '/admin/users',
     name: 'admin-users',
-    component: AdminUsersPage
+    component: AdminUsersPage,
+    meta: { requiresAuth: true, requiredRole: 'admin' }
   },
   {
     path: '/editor/series',
     name: 'editor-series',
-    component: EditorSeriesPage
+    component: EditorSeriesPage,
+    meta: { requiresAuth: true, requiredRole: 'editor' }
   },
   {
     path: '/editor/studios',
     name: 'editor-studios',
-    component: EditorStudiosPage
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: RegisterPage
+    component: EditorStudiosPage,
+    meta: { requiresAuth: true, requiredRole: 'editor' }
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+// Route guard for authentication and role-based access control
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  // Check if route requires authentication
+  if (to.meta.requiresAuth) {
+    if (!authStore.token) {
+      // User not authenticated, redirect to login
+      next({ name: 'login', query: { redirect: to.fullPath } })
+      return
+    }
+
+    // Check if route requires specific role
+    if (to.meta.requiredRole) {
+      const userRole = authStore.user?.role
+
+      // Check if user has required role (or is admin)
+      if (userRole !== to.meta.requiredRole && userRole !== 'admin') {
+        // User doesn't have required role, redirect to home
+        next({ name: 'home' })
+        return
+      }
+    }
+  }
+
+  next()
 })
 
 const app = createApp(App)

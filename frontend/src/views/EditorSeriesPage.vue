@@ -77,7 +77,7 @@ const fetchData = async () => {
         try {
           const res = await api.getSeriesDetail(s.id)
           return res.data
-        } catch (e) {
+        } catch {
           console.error(`Failed to fetch detail for series ${s.id}`)
           return s
         }
@@ -87,7 +87,7 @@ const fetchData = async () => {
     seriesList.value = detailedSeries
     studios.value = studiosRes.data
 
-  } catch (e) {
+  } catch {
     error.value = 'Failed to fetch data'
   }
 }
@@ -119,6 +119,12 @@ const openEdit = (s) => {
 const handleSubmit = async (e) => {
   e.preventDefault()
   error.value = ''
+
+  // Validate studio_id is selected
+  if (!form.value.studio_id) {
+    error.value = 'Please select a studio'
+    return
+  }
 
   try {
     const body = { ...form.value }

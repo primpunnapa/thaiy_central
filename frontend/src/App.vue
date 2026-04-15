@@ -1,11 +1,14 @@
 <template>
-  <Navbar />
-  <router-view />
+  <!-- <Navbar /> -->
+  <Layout>
+    <router-view />
+  </Layout>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
-import Navbar from '@/components/Navbar.vue'
+// import Navbar from '@/components/Navbar.vue'
+import Layout from './components/Layout.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()

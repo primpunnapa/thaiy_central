@@ -5,6 +5,8 @@ from app.database.session import get_db
 from app.persistence.studio import StudioRepository
 from app.business.studio import StudioService
 from app.schemas.studio import Studio, StudioCreate
+from app.core.auth import require_editor
+from app.database.models import User
 
 router = APIRouter()
 
@@ -19,7 +21,8 @@ def get_studios(service: StudioService = Depends(get_studio_service)):
 @router.post("/", response_model=Studio, status_code=201)
 def create_studio(
     studio: StudioCreate,
-    service: StudioService = Depends(get_studio_service)
+    service: StudioService = Depends(get_studio_service),
+    editor: User = Depends(require_editor)
 ):
     try:
         return service.create_studio(studio)
@@ -29,7 +32,8 @@ def create_studio(
 @router.delete("/{studio_id}", status_code=204)
 def delete_studio(
     studio_id: int,
-    service: StudioService = Depends(get_studio_service)
+    service: StudioService = Depends(get_studio_service),
+    editor: User = Depends(require_editor)
 ):
     try:
         service.delete_studio(studio_id)
@@ -40,7 +44,8 @@ def delete_studio(
 def update_studio(
     studio_id: int,
     studio_data: StudioCreate,
-    service: StudioService = Depends(get_studio_service)
+    service: StudioService = Depends(get_studio_service),
+    editor: User = Depends(require_editor)
 ):
     try:
         return service.update_studio(studio_id, studio_data)

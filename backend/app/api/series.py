@@ -50,6 +50,7 @@ def get_series_detail(
 def create_series(
     series: SeriesCreate,
     service: SeriesService = Depends(get_series_service),
+    editor: User = Depends(require_editor)
 ):
     """Create new series - Editor only"""
     try:
@@ -62,6 +63,7 @@ def update_series(
     series_id: int,
     series_update: SeriesUpdate,
     service: SeriesService = Depends(get_series_service),
+    editor: User = Depends(require_editor)
 ):
     """Update series - Editor only"""
     updated = service.update_series(series_id, series_update)
@@ -73,6 +75,7 @@ def update_series(
 def delete_series(
     series_id: int,
     service: SeriesService = Depends(get_series_service),
+    editor: User = Depends(require_editor)
 ):
     """Delete series - Editor only"""
     deleted = service.delete_series(series_id)

@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import series, studio, user, auth
 from app.database.session import engine, Base
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -29,3 +31,27 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.exception_handler(ValueError)
+async def value_error_handler(request: Request, exc: ValueError):
+    """Handle business logic errors"""
+    return JSONResponse(
+        status_code=400,
+        content={"detail": str(exc), "type": "validation_error"}
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(request: Request, exc: RequestValidationError):
+    """Handle invalid input data"""
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors(), "type": "validation_error"}
+    )
+
+@app.exception_handler(Exception)
+async def global_error_handler(request: Request, exc: Exception):
+    """Catch any unhandled exceptions - prevents crash"""
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error", "type": "server_error"}
+    )
