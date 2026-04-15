@@ -477,6 +477,8 @@ curl -X 'POST' \
 ![Series Detail|100x100](screenshots/seriesdetail.png)
 > - Schedule page grouped by day
 ![Schedule|100x100](screenshots/schedule.png)
+> - Studios page with studio info
+![Studios|100x100](screenshots/studios.png)
 > - Login/Register pages
 ![Login Page|100x100](screenshots/login.png)
 ![Register Page|100x100](screenshots/signin.png)
@@ -488,5 +490,5 @@ curl -X 'POST' \
 ![Editor Series|100x100](screenshots/seriesmanage.png)
 ![Editor Series Form|100x100](screenshots/editseries.png)
 ![Editor Series Form2|100x100](screenshots/editseries2.png)
-> - Studios page with platform badges
+> - Editor studio management
 ![Editor Studio|100x100](screenshots/studiomanage.png)
